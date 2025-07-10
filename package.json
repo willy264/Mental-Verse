@@ -36,6 +36,7 @@
     "react-jvectormap": "^0.0.15",
     "react-router-dom": "^7.0.2",
     "react-simple-maps": "^3.0.0",
+    "react-toastify": "^11.0.5",
     "reactstrap": "^9.2.3",
     "recharts": "^2.15.0",
     "swiper": "^11.2.10",

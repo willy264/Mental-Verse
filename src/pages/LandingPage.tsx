@@ -1,5 +1,50 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, Star, Check, Play, Users, Globe, DollarSign, Shield, Smartphone, BarChart3, TrendingUp, Menu, X } from 'lucide-react';
+import { ChevronDown, Heart, Shield, Users, Phone, Brain, Smile, Award, Menu, X, Calendar, MessageCircle, User, Star } from 'lucide-react';
+
+// Simple motion components to replace framer-motion
+const MotionDiv: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, className = '', style, ...props }) => (
+  <div
+    className={`${className} transition-all duration-500 hover:scale-105 hover:shadow-2xl`}
+    style={style}
+    {...props}
+  >
+    {children}
+  </div>
+);
+
+const MotionSection: React.FC<React.HTMLAttributes<HTMLElement>> = ({ children, className = '', style, ...props }) => (
+  <section className={`${className} animate-fade-in`} style={style} {...props}>
+    {children}
+  </section>
+);
+
+const motion = {
+  div: MotionDiv,
+  section: MotionSection,
+};
+
+// Animated Background Component
+const AnimatedBackground = () => {
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900"></div>
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-3/4 right-1/4 w-80 h-80 bg-purple-600 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-teal-600 rounded-full blur-3xl animate-pulse delay-2000"></div>
+      </div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(120,119,198,0.1)_0%,transparent_50%)]"></div>
+    </div>
+  );
+};
+
+// Smooth scroll handler
+const scrollToSection = (id: string) => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth' });
+  }
+};
 
 // Header Component
 const Header = () => {
@@ -15,29 +60,65 @@ const Header = () => {
   }, []);
 
   return (
-    <header className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-black/80 backdrop-blur-lg' : 'bg-transparent'}`}>
+    <header className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-gray-900/95 backdrop-blur-lg shadow-lg' : 'bg-transparent'}`}>
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold">C</span>
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+              <Brain className="text-white" size={20} />
             </div>
-            <span className="text-white text-xl font-bold">Crypgo</span>
+            <span className="text-white text-xl font-bold">MentalVerse</span>
           </div>
           
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-gray-300 hover:text-green-500 transition-colors">Features</a>
-            <a href="#benefits" className="text-gray-300 hover:text-green-500 transition-colors">Benefits</a>
-            <a href="#services" className="text-gray-300 hover:text-green-500 transition-colors">Services</a>
-            <a href="#upgrade" className="text-gray-300 hover:text-green-500 transition-colors">Upgrade</a>
-            <a href="#faq" className="text-gray-300 hover:text-green-500 transition-colors">FAQs</a>
+            <button
+              className="text-gray-300 hover:text-blue-400 transition-colors"
+              onClick={() => scrollToSection('services')}
+              type="button"
+            >
+              Services
+            </button>
+            {/* <button
+              className="text-gray-300 hover:text-blue-400 transition-colors"
+              onClick={() => scrollToSection('about')}
+              type="button"
+            >
+              About
+            </button> */}
+            <button
+              className="text-gray-300 hover:text-blue-400 transition-colors"
+              onClick={() => scrollToSection('therapists')}
+              type="button"
+            >
+              Therapists
+            </button>
+            <button
+              className="text-gray-300 hover:text-blue-400 transition-colors"
+              onClick={() => scrollToSection('resources')}
+              type="button"
+            >
+              Resources
+            </button>
+            <button
+              className="text-gray-300 hover:text-blue-400 transition-colors"
+              onClick={() => scrollToSection('contact')}
+              type="button"
+            >
+              Contact
+            </button>
           </nav>
           
-          <button className="hidden md:block bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors">
-            Book a Call
-          </button>
+          <div className="hidden md:flex items-center space-x-4">
+            <button type='button' className="text-gray-300 hover:text-blue-400 transition-colors">
+              Sign In
+            </button>
+            <button type='button' className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105">
+              Get Started
+            </button>
+          </div>
           
           <button 
+            type='button'
             className="md:hidden text-white"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
@@ -46,20 +127,59 @@ const Header = () => {
         </div>
         
         {isMenuOpen && (
-          <div className="md:hidden mt-4 pb-4">
-            <nav className="flex flex-col space-y-4">
-              <a href="#features" className="text-gray-300 hover:text-green-500 transition-colors">Features</a>
-              <a href="#benefits" className="text-gray-300 hover:text-green-500 transition-colors">Benefits</a>
-              <a href="#services" className="text-gray-300 hover:text-green-500 transition-colors">Services</a>
-              <a href="#upgrade" className="text-gray-300 hover:text-green-500 transition-colors">Upgrade</a>
-              <a href="#faq" className="text-gray-300 hover:text-green-500 transition-colors">FAQs</a>
-              <button className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors w-fit">
-                Book a Call
-              </button>
+          <div
+            className="md:hidden mt-4 pb-4 bg-gray-800/95 backdrop-blur-lg rounded-lg shadow-lg transition-all duration-300 ease-in-out transform animate-slide-down"
+            style={{
+              opacity: isMenuOpen ? 1 : 0,
+              transform: isMenuOpen ? 'translateY(0)' : 'translateY(-20px)'
+            }}
+          >
+            <nav className="flex flex-col space-y-4 p-4">
+              {[
+                { label: 'Services', id: 'services' },
+                // { label: 'About', id: 'about' },
+                { label: 'Therapists', id: 'therapists' },
+                { label: 'Resources', id: 'resources' },
+                { label: 'Contact', id: 'contact' }
+              ].map((item, idx) => (
+                <button
+                  key={item.id}
+                  className={`text-gray-300 hover:text-blue-500 text-left transition-all duration-300 ease-in-out opacity-0 translate-x-[-16px] menu-item-animate`}
+                  style={{
+                    animation: isMenuOpen ? `menuItemFadeIn 0.3s forwards` : undefined,
+                    animationDelay: `${idx * 80 + 100}ms`
+                  }}
+                  onClick={() => { scrollToSection(item.id); setIsMenuOpen(false); }}
+                  type="button"
+                >
+                  {item.label}
+                </button>
+              ))}
             </nav>
           </div>
         )}
       </div>
+      <style>
+        {`
+          @keyframes slide-down {
+            0% { opacity: 0; transform: translateY(-20px);}
+            100% { opacity: 1; transform: translateY(0);}
+          }
+          .animate-slide-down {
+            animation: slide-down 0.3s cubic-bezier(0.4,0,0.2,1);
+          }
+          @keyframes menuItemFadeIn {
+            to {
+              opacity: 1;
+              transform: translateX(0);
+            }
+          }
+          .menu-item-animate {
+            opacity: 0;
+            transform: translateX(-16px);
+          }
+        `}
+      </style>
     </header>
   );
 };
@@ -67,55 +187,70 @@ const Header = () => {
 // Hero Section Component
 const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-black to-gray-900 overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-green-900/20 via-transparent to-transparent"></div>
-      
-      <div className="container mx-auto px-4 pt-20">
+    <section id="about" className="pb-10 relative min-h-screen flex items-center justify-center overflow-hidden">
+      <AnimatedBackground />
+      <div className="container mx-auto px-4 pt-20 relative z-10">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="text-center md:text-left">
-            <div className="inline-block bg-green-500/20 text-green-400 px-4 py-2 rounded-full text-sm mb-6">
-              Future of crypto trading
+            <div className="inline-block bg-blue-600/20 backdrop-blur-sm border border-blue-500/30 text-blue-300 px-4 py-2 rounded-full text-sm mb-6">
+              Your Mental Health Journey Starts Here
             </div>
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-              Fast & Secure
-              <span className="block text-green-400">Cryptocurrency</span>
-              Exchange
+            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
+              Find Peace in
+              <span className="block bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Your Mind</span>
             </h1>
             <p className="text-gray-300 text-lg mb-8 max-w-md">
-              Trade cryptocurrencies with ease, security, and advanced features on our cutting-edge platform.
+              Connect with licensed therapists, access mental health resources, and take control of your wellbeing with our comprehensive platform.
             </p>
-            <button className="bg-green-500 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-green-600 transition-colors">
-              Explore More
-            </button>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button type='button' className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg">
+                Start Your Journey
+              </button>
+              <button type='button' className="border border-blue-500/50 text-blue-300 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-600/20 transition-all transform hover:scale-105">
+                Learn More
+              </button>
+            </div>
           </div>
-          
           <div className="relative">
             <div className="relative z-10">
-              <div className="bg-gradient-to-b from-gray-800 to-gray-900 rounded-3xl p-6 max-w-sm mx-auto shadow-2xl">
-                <div className="bg-black rounded-2xl p-4">
-                  <div className="flex items-center justify-between mb-4">
+              <motion.div className="bg-gray-800/50 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-6 max-w-sm mx-auto shadow-2xl">
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Brain className="text-white" size={32} />
+                  </div>
+                  <h3 className="text-white font-semibold text-lg">Mental Health Dashboard</h3>
+                  <p className="text-gray-400 text-sm">Track your progress</p>
+                </div>
+                <div className="space-y-4">
+                  <motion.div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-sm border border-blue-500/30 rounded-xl p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-gray-200 font-medium">Mood Today</span>
+                      <span className="text-blue-400 font-semibold">Great</span>
+                    </div>
                     <div className="flex space-x-1">
-                      <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                      <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                      {[...Array(5)].map((_, i) => (
+                        <div key={i} className={`h-2 flex-1 rounded ${i < 4 ? 'bg-blue-500' : 'bg-gray-600'}`}></div>
+                      ))}
                     </div>
-                    <span className="text-white text-sm">Statistics</span>
-                  </div>
-                  <div className="space-y-3">
+                  </motion.div>
+                  <motion.div className="bg-green-600/20 backdrop-blur-sm border border-green-500/30 rounded-xl p-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-400">Bitcoin</span>
-                      <span className="text-green-400">+2.3%</span>
+                      <span className="text-gray-200 font-medium">Next Session</span>
+                      <Calendar className="text-green-400" size={20} />
                     </div>
-                    <div className="h-20 bg-gradient-to-r from-green-500/20 to-green-500/40 rounded-lg flex items-end p-2">
-                      <div className="w-full h-full bg-gradient-to-t from-green-500 to-green-400 rounded opacity-80"></div>
+                    <p className="text-green-400 font-semibold">Tomorrow at 3:00 PM</p>
+                  </motion.div>
+                  <motion.div className="bg-pink-600/20 backdrop-blur-sm border border-pink-500/30 rounded-xl p-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-200 font-medium">Weekly Goal</span>
+                      <span className="text-pink-400 font-semibold">85%</span>
                     </div>
-                    <div className="bg-green-500 text-white p-3 rounded-lg">
-                      <div className="text-sm opacity-80">Balance</div>
-                      <div className="text-lg font-bold">$455 4562 7718 3567</div>
+                    <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
+                      <div className="bg-gradient-to-r from-pink-500 to-purple-500 h-2 rounded-full" style={{width: '85%'}}></div>
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
@@ -124,615 +259,260 @@ const Hero = () => {
   );
 };
 
-// Trust Indicators Component
-const TrustIndicators = () => {
-  const logos = ['Logoipsum', 'Logoipsum', 'Logoipsum', 'Logoipsum', 'Logoipsum'];
-  
-  return (
-    <section className="py-16 bg-black">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <p className="text-gray-400 mb-8">Trusted by top crypto platforms</p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-            {logos.map((logo, index) => (
-              <div key={index} className="text-gray-600 text-xl font-semibold hover:text-gray-400 transition-colors cursor-pointer">
-                {logo}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// Crypto Coins Component
-const CryptoCoins = () => {
-  const coins = [
-    { name: 'Bitcoin', symbol: 'BTC', price: '$107.18', category: 'Highest volume', color: 'bg-orange-500' },
-    { name: 'Ethereum', symbol: 'ETH', price: '$3296.01', category: 'Top gainer', color: 'bg-blue-500' },
-    { name: 'Litecoin', symbol: 'LTC', price: '$117.15', category: 'New listing', color: 'bg-gray-500' },
-    { name: 'Polkadot', symbol: 'DOT', price: '$3.38', category: 'Most traded', color: 'bg-pink-500' },
-    { name: 'Solana', symbol: 'SOL', price: '$182.47', category: 'Biggest gainers', color: 'bg-purple-500' },
-    { name: 'Chainlink', symbol: 'LINK', price: '$13.50', category: 'Trending', color: 'bg-blue-400' }
-  ];
-
-  return (
-    <section className="py-16 bg-gray-900">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <p className="text-green-400 mb-4">Featured crypto coins</p>
-          <h2 className="text-4xl font-bold text-white">Top crypto coins updates</h2>
-        </div>
-        
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {coins.map((coin, index) => (
-            <div key={index} className="bg-gray-800 rounded-xl p-6 hover:bg-gray-700 transition-colors group">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center space-x-3">
-                  <div className={`w-10 h-10 ${coin.color} rounded-full flex items-center justify-center`}>
-                    <span className="text-white font-bold">{coin.symbol.charAt(0)}</span>
-                  </div>
-                  <div>
-                    <div className="text-white font-semibold">{coin.name}</div>
-                    <div className="text-gray-400 text-sm">{coin.symbol}</div>
-                  </div>
-                </div>
-                <div className="text-white font-bold text-lg">{coin.price}</div>
-              </div>
-              <div className="text-green-400 text-sm bg-green-400/20 px-2 py-1 rounded-full w-fit">
-                {coin.category}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// Portfolio Component
-const Portfolio = () => {
-  const cryptos = [
-    { name: 'Bitcoin', symbol: 'BTC', change: '+2.20%', color: 'text-green-400' },
-    { name: 'Ethereum', symbol: 'ETH', change: '+150%', color: 'text-green-400' },
-    { name: 'Litecoin', symbol: 'LTC', change: '+305%', color: 'text-green-400' },
-    { name: 'Polkadot', symbol: 'DOT', change: '+2.80%', color: 'text-green-400' }
-  ];
-
-  return (
-    <section className="py-16 bg-black">
-      <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <h3 className="text-white text-2xl font-bold mb-6">Your portfolio is up 2.3%</h3>
-            <div className="bg-gray-900 rounded-xl p-6">
-              <div className="h-32 bg-gradient-to-r from-green-500/20 to-green-500/40 rounded-lg mb-4 flex items-end">
-                <div className="w-full h-3/4 bg-gradient-to-t from-green-500 to-green-400 rounded-b opacity-80"></div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="space-y-4">
-            {cryptos.map((crypto, index) => (
-              <div key={index} className="flex items-center justify-between bg-gray-900 rounded-lg p-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
-                    <span className="text-white text-sm font-bold">{crypto.symbol.charAt(0)}</span>
-                  </div>
-                  <div>
-                    <div className="text-white font-semibold">{crypto.name}</div>
-                    <div className="text-gray-400 text-sm">{crypto.symbol}</div>
-                  </div>
-                </div>
-                <div className={`font-semibold ${crypto.color}`}>
-                  {crypto.change}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// Features Component
-const Features = () => {
-  const features = [
-    {
-      title: 'Blockchain Consulting With Your Business',
-      description: 'Expert guidance for integrating blockchain technology into your business operations.'
+// Services Component
+const Services = () => {
+  const services = [
+    { 
+      title: 'Individual Therapy', 
+      description: 'One-on-one sessions with licensed therapists tailored to your specific needs.',
+      icon: User,
+      color: 'from-blue-500 to-blue-600'
     },
-    {
-      title: 'Designed for crypto trading platform',
-      description: 'Purpose-built interface optimized for cryptocurrency trading and management.'
+    { 
+      title: 'Group Therapy', 
+      description: 'Connect with others facing similar challenges in a supportive environment.',
+      icon: Users,
+      color: 'from-green-500 to-green-600'
     },
-    {
-      title: 'Kickstart your crypto website today',
-      description: 'Launch your cryptocurrency platform with our comprehensive template solutions.'
+    { 
+      title: 'Crisis Support', 
+      description: '24/7 crisis intervention and emergency mental health support.',
+      icon: Phone,
+      color: 'from-red-500 to-red-600'
     },
-    {
-      title: 'Launch your blockchain platform today',
-      description: 'Deploy your blockchain solution with enterprise-grade security and performance.'
+    { 
+      title: 'Mindfulness & Meditation', 
+      description: 'Guided meditation sessions and mindfulness practices for daily wellness.',
+      icon: Brain,
+      color: 'from-purple-500 to-purple-600'
+    },
+    { 
+      title: 'Couples Counseling', 
+      description: 'Relationship therapy to strengthen bonds and improve communication.',
+      icon: Heart,
+      color: 'from-pink-500 to-pink-600'
+    },
+    { 
+      title: 'Teen & Child Support', 
+      description: 'Specialized mental health services for children and adolescents.',
+      icon: Smile,
+      color: 'from-orange-500 to-orange-600'
     }
   ];
 
   return (
-    <section id="features" className="py-16 bg-gray-900">
-      <div className="container mx-auto px-4">
+    <motion.section id="services" className="py-16 bg-gray-900 relative">
+      <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900"></div>
+      <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-12">
-          <p className="text-green-400 mb-4">Why choose Crypgo</p>
-          <h2 className="text-4xl font-bold text-white">Features of the crypto framer mobile application</h2>
+          <p className="text-blue-400 mb-4">Our Services</p>
+          <h2 className="text-4xl font-bold text-white">Comprehensive Mental Health Support</h2>
+          <p className="text-gray-300 mt-4 max-w-2xl mx-auto">
+            We offer a wide range of mental health services designed to support you at every stage of your journey.
+          </p>
         </div>
-        
-        <div className="grid md:grid-cols-2 gap-8">
-          {features.map((feature, index) => (
-            <div key={index} className="bg-gray-800 rounded-xl p-6 hover:bg-gray-700 transition-colors">
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Check className="text-white" size={24} />
-                </div>
-                <div>
-                  <h3 className="text-white font-semibold text-lg mb-2">{feature.title}</h3>
-                  <p className="text-gray-400">{feature.description}</p>
-                </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {services.map((service, index) => (
+            <motion.div key={index} className="bg-gray-800/50 backdrop-blur-xl border border-gray-700/50 rounded-xl p-6 hover:shadow-2xl transition-all duration-300 group hover:scale-105">
+              <div className={`w-12 h-12 bg-gradient-to-br ${service.color} rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                <service.icon className="text-white" size={24} />
               </div>
-            </div>
+              <h3 className="text-white font-semibold text-lg mb-3">{service.title}</h3>
+              <p className="text-gray-300">{service.description}</p>
+            </motion.div>
           ))}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
-// Stats Component
+// Add Resources Section Anchor
+const ResourcesAnchor = () => (
+  <div id="resources" style={{ position: 'relative', top: '-80px' }}></div>
+);
+
+// Stats Component (used as Resources section anchor)
 const Stats = () => {
   const stats = [
-    { number: '6M+', label: 'Active users', icon: Users },
-    { number: '24/7', label: 'User Support', icon: Shield },
-    { number: '160+', label: 'Countries', icon: Globe },
-    { number: '$22B+', label: 'Trade Volume', icon: DollarSign }
+    { number: '10K+', label: 'Clients Helped', icon: Users },
+    { number: '500+', label: 'Licensed Therapists', icon: User },
+    { number: '24/7', label: 'Crisis Support', icon: Phone },
+    { number: '95%', label: 'Satisfaction Rate', icon: Heart }
   ];
 
   return (
-    <section className="py-16 bg-black">
-      <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {stats.map((stat, index) => (
-            <div key={index} className="bg-gray-900 rounded-xl p-6 text-center hover:bg-gray-800 transition-colors">
-              <div className="flex justify-center mb-4">
-                <stat.icon className="text-green-400" size={32} />
-              </div>
-              <div className="text-3xl font-bold text-green-400 mb-2">{stat.number}</div>
-              <div className="text-gray-400">{stat.label}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// Mobile App Component
-const MobileApp = () => {
-  const features = [
-    { title: 'Planning', description: 'Map the crypto projects scope with Framer template' },
-    { title: 'Refinement', description: 'Refine & improve your crypto lending page for better view' },
-    { title: 'Prototype', description: 'Build crypto website fast for your product and apps' },
-    { title: 'Scale and support', description: 'Deploy product live and ensure expert support' }
-  ];
-
-  return (
-    <section className="py-16 bg-gray-900">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <p className="text-green-400 mb-4">We deliver best solution</p>
-          <h2 className="text-4xl font-bold text-white max-w-2xl mx-auto">
-            One application with multiple options to give you freedom of buying & selling
-          </h2>
-        </div>
-        
-        <div className="relative">
-          <div className="text-center mb-8">
-            <div className="inline-block bg-gray-800 rounded-3xl p-8 shadow-2xl">
-              <div className="w-64 h-96 bg-black rounded-2xl p-4 relative">
-                <div className="text-white text-center">
-                  <div className="mb-4">Exchange</div>
-                  <div className="text-2xl font-bold text-green-400">5,500.25</div>
-                  <div className="text-sm text-gray-400">ETH</div>
-                  <div className="my-4">
-                    <div className="text-xl font-bold">67,362.471</div>
-                    <div className="text-sm text-gray-400">Total Portfolio</div>
-                  </div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <button className="bg-green-500 text-white px-6 py-2 rounded-lg w-full">
-                      Exchange now
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
+    <>
+      <ResourcesAnchor />
+      <section className="py-16 bg-white dark:bg-[#181c2a] relative overflow-hidden border-b border-gray-200 dark:border-gray-800">
+        <div className="container mx-auto px-4 relative z-10">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Play className="text-white" size={24} />
+            {stats.map((stat, index) => (
+              <div key={index} className="text-center group">
+                <div className="flex justify-center mb-4">
+                  <div className="w-16 h-16 bg-gray-100 dark:bg-[#23263a] rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 border border-gray-200 dark:border-gray-700">
+                    <stat.icon className="text-blue-600 dark:text-blue-400" size={32} />
+                  </div>
                 </div>
-                <h3 className="text-white font-semibold text-lg mb-2">{feature.title}</h3>
-                <p className="text-gray-400 text-sm">{feature.description}</p>
+                <div className="text-4xl font-bold text-gray-900 dark:text-white mb-2">{stat.number}</div>
+                <div className="text-gray-500 dark:text-gray-400">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 
-// Template Section Component
-const TemplateSection = () => {
-  return (
-    <section className="py-16 bg-black">
-      <div className="container mx-auto px-4">
-        <div className="bg-gray-900 rounded-2xl p-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Crypgo powered by framer platform
-          </h2>
-          <p className="text-gray-400 mb-6 max-w-2xl mx-auto">
-            Our landing page empowers Framer developers to have free, safe and more trustworthy experiences get our templates now and build your.
-          </p>
-          <button className="bg-green-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors">
-            Get Template
-          </button>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// Portfolio Creation Component
-const PortfolioCreation = () => {
-  const features = [
-    'Manage your portfolio',
-    'Vault protection',
-    'Mobile apps'
+const Therapists = () => {
+  const therapists = [
+    {
+      name: 'Dr. Sarah Johnson',
+      specialty: 'Anxiety & Depression',
+      experience: '12 years',
+      rating: 4.9,
+      image: 'SJ'
+    },
+    {
+      name: 'Dr. Michael Chen',
+      specialty: 'Trauma & PTSD',
+      experience: '8 years',
+      rating: 4.8,
+      image: 'MC'
+    },
+    {
+      name: 'Dr. Emily Rodriguez',
+      specialty: 'Couples Therapy',
+      experience: '15 years',
+      rating: 5.0,
+      image: 'ER'
+    },
+    {
+      name: 'Dr. David Kim',
+      specialty: 'Child Psychology',
+      experience: '10 years',
+      rating: 4.9,
+      image: 'DK'
+    }
   ];
 
   return (
-    <section className="py-16 bg-gray-900">
-      <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <p className="text-green-400 mb-4">Crypto landing page template</p>
-            <h2 className="text-4xl font-bold text-white mb-8">
-              Create your cryptocurrency portfolio today
+    <motion.section id="therapists" className="py-16 bg-gray-900 relative">
+      <div className="absolute inset-0 bg-gradient-to-b from-gray-800 via-gray-900 to-gray-800"></div>
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="text-center mb-12">
+          <p className="text-blue-400 mb-4">Meet Our Team</p>
+          <h2 className="text-4xl font-bold text-white">Licensed Mental Health Professionals</h2>
+          <p className="text-gray-300 mt-4 max-w-2xl mx-auto">
+            Our team consists of experienced, licensed therapists who are dedicated to helping you achieve mental wellness.
+          </p>
+        </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {therapists.map((therapist, index) => (
+            <motion.div key={index} className="bg-gray-800/50 backdrop-blur-xl border border-gray-700/50 rounded-xl p-6 text-center hover:shadow-2xl transition-all duration-300 hover:scale-105">
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-white font-bold text-lg">{therapist.image}</span>
+              </div>
+              <h3 className="text-white font-semibold text-lg mb-2">{therapist.name}</h3>
+              <p className="text-blue-400 font-medium mb-2">{therapist.specialty}</p>
+              <p className="text-gray-400 text-sm mb-3">{therapist.experience} experience</p>
+              <div className="flex items-center justify-center space-x-1">
+                <Star className="text-yellow-400 fill-current" size={16} />
+                <span className="text-gray-300 font-medium">{therapist.rating}</span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </motion.section>
+  );
+};
+
+const CTASection = () => {
+  return (
+    <div id="contact">
+      <section className="py-20 bg-white dark:bg-[#181c2a] border-b border-gray-200 dark:border-gray-800">
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center max-w-2xl mx-auto">
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Ready to Start Your Mental Health Journey?
             </h2>
-            <p className="text-gray-400 mb-8">
-              Coinbase has a variety of features that make it the best place to start trading
+            <p className="text-gray-600 dark:text-gray-300 mb-8 text-lg">
+              Take the first step towards better mental health. Our licensed therapists are here to support you every step of the way.
             </p>
-            
-            <div className="space-y-4">
-              {features.map((feature, index) => (
-                <div key={index} className="flex items-center space-x-3">
-                  <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                    <Check className="text-white" size={16} />
-                  </div>
-                  <span className="text-white">{feature}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-4">
-              <div className="bg-blue-600 rounded-xl p-4 text-center">
-                <div className="text-white font-bold">Ethereum</div>
-                <div className="text-white text-sm">ETH/USD</div>
-                <div className="flex justify-center mt-2">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="text-yellow-400 fill-current" size={16} />
-                  ))}
-                </div>
-              </div>
-              <div className="bg-pink-600 rounded-xl p-4 text-center">
-                <div className="text-white font-bold">Polkadot</div>
-                <div className="text-white text-sm">DOT/USD</div>
-              </div>
-            </div>
-            <div className="space-y-4">
-              <div className="bg-red-600 rounded-xl p-4 text-center">
-                <div className="text-white font-bold">Avalanche</div>
-                <div className="text-white text-sm">AVAX/USD</div>
-              </div>
-              <div className="bg-orange-600 rounded-xl p-4 text-center">
-                <div className="text-white font-bold">Bitcoin</div>
-                <div className="text-white text-sm">BTC/USD</div>
-                <div className="flex justify-center mt-2">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="text-yellow-400 fill-current" size={16} />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// Business Upgrade Component
-const BusinessUpgrade = () => {
-  const leftFeatures = [
-    '100% Secure',
-    'A fraction of the cost',
-    'More durable',
-    'Easier to use'
-  ];
-
-  const rightFeatures = [
-    'Free figma file',
-    'Powerful in performance',
-    'Designed for crypto',
-    '100% free framer template'
-  ];
-
-  return (
-    <section id="upgrade" className="py-16 bg-black">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <p className="text-green-400 mb-4">Crypgo upgrade</p>
-          <h2 className="text-4xl font-bold text-white">Upgrade your crypto business</h2>
-          <p className="text-gray-400 mt-4">
-            Get faster, safer, more affordable cloud object storage no centralized point of failure.
-          </p>
-        </div>
-        
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <div className="grid grid-cols-2 gap-8">
-              <div className="space-y-4">
-                {leftFeatures.map((feature, index) => (
-                  <div key={index} className="flex items-center space-x-3">
-                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                      <Check className="text-white" size={16} />
-                    </div>
-                    <span className="text-white">{feature}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="space-y-4">
-                {rightFeatures.map((feature, index) => (
-                  <div key={index} className="flex items-center space-x-3">
-                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                      <Check className="text-white" size={16} />
-                    </div>
-                    <span className="text-white">{feature}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-gray-900 rounded-xl p-6">
-            <div className="bg-gray-800 rounded-lg p-4">
-              <div className="flex items-center justify-between mb-4">
-                <div className="text-orange-400 font-bold">USD/BTC</div>
-                <div className="text-white">
-                  <div className="text-lg font-bold">78%</div>
-                  <div className="text-sm text-gray-400">24h Volume</div>
-                </div>
-              </div>
-              <div className="h-32 bg-gradient-to-r from-green-500/20 to-green-500/40 rounded-lg mb-4 flex items-end justify-around">
-                {[...Array(7)].map((_, i) => (
-                  <div key={i} className={`w-4 bg-green-400 rounded-t ${i === 3 ? 'h-full' : 'h-3/4'}`}></div>
-                ))}
-              </div>
-              <div className="text-center">
-                <div className="text-white font-bold text-lg">$76659.5</div>
-                <div className="text-green-400 text-sm">+3.43%</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// Support Section Component
-const Support = () => {
-  const pillars = [
-    {
-      title: '24/7 Support',
-      description: 'Need help? Get your requests solved quickly via support team.',
-      icon: Shield
-    },
-    {
-      title: 'Community',
-      description: 'Join the conversations on our worldwide OKEx communities',
-      icon: Users
-    },
-    {
-      title: 'Academy',
-      description: 'Learn blockchain and crypto for free with our templates.',
-      icon: BarChart3
-    }
-  ];
-
-  return (
-    <section className="py-16 bg-gray-900 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-r from-green-900/20 via-transparent to-transparent"></div>
-      
-      <div className="container mx-auto px-4 relative">
-        <div className="text-center mb-12">
-          <p className="text-green-400 mb-4">Always by your side</p>
-          <h2 className="text-4xl font-bold text-white">Be the first to use our Crypgo!</h2>
-          <p className="text-gray-400 mt-4">
-            Get faster, safer, more affordable landingpage for your crypto.
-          </p>
-        </div>
-        
-        <div className="grid md:grid-cols-3 gap-8">
-          {pillars.map((pillar, index) => (
-            <div key={index} className="text-center">
-              <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                <pillar.icon className="text-green-400" size={24} />
-              </div>
-              <h3 className="text-white font-semibold text-lg mb-2">{pillar.title}</h3>
-              <p className="text-gray-400">{pillar.description}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// FAQ Component
-const FAQ = () => {
-  const [openIndex, setOpenIndex] = useState(null);
-
-  const faqs = [
-    {
-      question: 'What is Crypgo?',
-      answer: 'Crypgo is a modern cryptocurrency exchange platform that provides secure, fast, and user-friendly trading services for digital assets.'
-    },
-    {
-      question: 'Is Crypgo available worldwide?',
-      answer: 'Yes, Crypgo is available in over 160 countries worldwide, making it accessible to users globally.'
-    },
-    {
-      question: 'Which cryptocurrencies are supported on Crypgo?',
-      answer: 'Crypgo supports over 100 cryptocurrencies including Bitcoin, Ethereum, Litecoin, Polkadot, Solana, and many more.'
-    },
-    {
-      question: 'Is my personal information secure with Crypgo?',
-      answer: 'Yes, we use enterprise-grade security measures including encryption, two-factor authentication, and cold storage to protect your data and funds.'
-    },
-    {
-      question: 'Are there any deposit or withdrawal fees?',
-      answer: 'We offer competitive fees with transparent pricing. Some transactions may incur minimal network fees depending on the blockchain.'
-    },
-    {
-      question: 'Does Crypgo offer advanced trading tools?',
-      answer: 'Yes, we provide professional trading tools including charts, indicators, order types, and portfolio management features.'
-    }
-  ];
-
-  return (
-    <section id="faq" className="py-16 bg-black">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <p className="text-green-400 mb-4">Popular questions</p>
-          <h2 className="text-4xl font-bold text-white">Learn more about Crypgo</h2>
-          <p className="text-gray-400 mt-4">We accept 100+ cryptocurrencies around the world</p>
-        </div>
-        
-        <div className="max-w-3xl mx-auto space-y-4">
-          {faqs.map((faq, index) => (
-            <div key={index} className="bg-gray-900 rounded-xl overflow-hidden">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
-                className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-800 transition-colors"
-                onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                type='button'
+                className="px-8 py-3 rounded-full font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-all shadow-lg"
               >
-                <span className="text-white font-semibold">{faq.question}</span>
-                <ChevronDown 
-                  className={`text-green-400 transition-transform ${openIndex === index ? 'rotate-180' : ''}`}
-                  size={24}
-                />
+                Start Free Assessment
               </button>
-              {openIndex === index && (
-                <div className="px-6 pb-4">
-                  <p className="text-gray-400">{faq.answer}</p>
-                </div>
-              )}
+              <button
+                type='button'
+                className="px-8 py-3 rounded-full font-semibold border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition-all"
+              >
+                Schedule Consultation
+              </button>
             </div>
-          ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 };
 
-// Footer Component
+// Footer Component (Contact section)
 const Footer = () => {
   return (
-    <footer className="bg-black py-16">
+    <footer className="bg-gray-900 py-16 border-t border-gray-800">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold">C</span>
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <Brain className="text-white" size={20} />
               </div>
-              <span className="text-white text-xl font-bold">Crypgo</span>
+              <span className="text-white text-xl font-bold">MentalVerse</span>
             </div>
             <p className="text-gray-400 mb-6">
-              Transform your crypto business with Crypgo. Framer, a template for startups and blockchain services.
+              Transforming mental health care through accessible, personalized, and effective therapy services.
             </p>
-            <div className="flex space-x-4">
-              <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center">
-                <span className="text-white">T</span>
-              </div>
-              <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center">
-                <span className="text-white">I</span>
-              </div>
-              <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center">
-                <span className="text-white">F</span>
-              </div>
-            </div>
           </div>
           
           <div>
-            <h4 className="text-white font-semibold mb-4">Links</h4>
+            <h4 className="text-white font-semibold mb-4">Services</h4>
             <div className="space-y-2">
-              <a href="#features" className="text-gray-400 hover:text-green-400 transition-colors block">Features</a>
-              <a href="#benefits" className="text-gray-400 hover:text-green-400 transition-colors block">Benefits</a>
-              <a href="#services" className="text-gray-400 hover:text-green-400 transition-colors block">Services</a>
-              <a href="#upgrade" className="text-gray-400 hover:text-green-400 transition-colors block">Upgrade</a>
+              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors block">Individual Therapy</a>
+              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors block">Group Therapy</a>
+              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors block">Crisis Support</a>
+              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors block">Couples Counseling</a>
             </div>
           </div>
           
           <div>
-            <h4 className="text-white font-semibold mb-4">Other Pages</h4>
+            <h4 className="text-white font-semibold mb-4">Resources</h4>
             <div className="space-y-2">
-              <a href="#" className="text-gray-400 hover:text-green-400 transition-colors block">Error 404</a>
-              <a href="#" className="text-gray-400 hover:text-green-400 transition-colors block">Terms & Conditions</a>
-              <a href="#" className="text-gray-400 hover:text-green-400 transition-colors block">Privacy Policy</a>
+              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors block">Self-Assessment</a>
+              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors block">Wellness Library</a>
+              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors block">Crisis Resources</a>
+              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors block">Community Forum</a>
             </div>
           </div>
           
           <div>
-            <h4 className="text-white font-semibold mb-4">Download app</h4>
-            <div className="space-y-3">
-              <div className="bg-gray-800 rounded-lg p-3 flex items-center space-x-3">
-                <div className="w-8 h-8 bg-green-500 rounded flex items-center justify-center">
-                  <span className="text-white text-xs">GP</span>
-                </div>
-                <div>
-                  <div className="text-white text-sm font-semibold">Google Play</div>
-                  <div className="text-gray-400 text-xs">Get it on</div>
-                </div>
-              </div>
-              <div className="bg-gray-800 rounded-lg p-3 flex items-center space-x-3">
-                <div className="w-8 h-8 bg-gray-600 rounded flex items-center justify-center">
-                  <span className="text-white text-xs">AS</span>
-                </div>
-                <div>
-                  <div className="text-white text-sm font-semibold">App Store</div>
-                  <div className="text-gray-400 text-xs">Download on the</div>
-                </div>
-              </div>
+            <h4 className="text-white font-semibold mb-4">Contact</h4>
+            <div className="space-y-2">
+              <p className="text-gray-400">Crisis Hotline: 988</p>
+              <p className="text-gray-400">Support: (555) 123-4567</p>
+              <p className="text-gray-400">Email: support@mentalverse.com</p>
+              <p className="text-gray-400">Available 24/7</p>
             </div>
           </div>
         </div>
         
         <div className="border-t border-gray-800 mt-12 pt-8 text-center">
-          <p className="text-gray-400">© 2024 Crypgo. All rights reserved.</p>
+          <p className="text-gray-400">© 2024 MentalVerse. All rights reserved.</p>
         </div>
       </div>
     </footer>
@@ -742,20 +522,13 @@ const Footer = () => {
 // Main App Component
 const App = () => {
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-gray-900">
       <Header />
       <Hero />
-      <TrustIndicators />
-      <CryptoCoins />
-      <Portfolio />
-      <Features />
+      <Services />
       <Stats />
-      <MobileApp />
-      <TemplateSection />
-      <PortfolioCreation />
-      <BusinessUpgrade />
-      <Support />
-      <FAQ />
+      <Therapists />
+      <CTASection />
       <Footer />
     </div>
   );
